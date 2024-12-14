@@ -31,3 +31,72 @@ cy.contains('label', 'Nome Completo')
 ```
 
 **Note:** visual identification method focused on finding locators per visual snipets (as you would in a manual test)
+
+### Adopting a model to write the tests (POM)
+
+One of the most common code standards is the Page Object Model (POM) which group actions or functions related to the same page in one same file (e.g. [pre-reg.page.js](./web/cypress/support/pages/pre-reg.page.js)).
+
+How to use:
+
+1. Create a file and a class that will represent one page as in [pre-reg.page.js](./web/cypress/support/pages/pre-reg.page.js) and include all required actions as functions:
+
+```js
+class PreRegPage {
+  go() {
+    cy.visit('/')
+    cy.get('header nav a[href="pre-cadastro"]').click()
+
+    cy.get('form h2').should('be.visible').and('have.text', 'Seus dados')
+  }
+
+  fillForm(fullName, email) {
+    cy.get('input[name="fullname"]').type(fullName)
+    cy.get('input[name="email"]').type(email)
+  }
+
+  submit() {
+    cy.contains('button[type="submit"]', 'Continuar').click()
+  }
+
+  verifyPreReg(firstName, email) {
+    cy.get('.user-name')
+      .should('be.visible')
+      .and('have.text', 'Olá, ' + firstName)
+    cy.get('.user-email').should('be.visible').and('have.text', email)
+  }
+
+  alertHave(fieldName, text) {
+    cy.contains('label', fieldName)
+      .parent()
+      .find('.alert-msg')
+      .should('be.visible')
+      .and('have.text', text)
+  }
+}
+
+export default new PreRegPage()
+```
+
+**Note:** remember to export the class so that you can use it on other files.
+
+2. Import and call for specific pages functions as in [pre-registration.cy.js](./web/cypress/e2e/%20pre-registration.cy.js):
+
+```js
+import preRegPage from "../support/pages/pre-reg.page";
+
+describe("Pre-registration", () => {
+  it("Should perform clients pre-registration", () => {
+    preRegPage.go();
+    preRegPage.fillForm("Customer Test", "customer@test.com");
+    preRegPage.submit();
+
+    cy.get(".user-name").should("be.visible").and("have.text", "Olá, Customer");
+    cy.get(".user-email")
+      .should("be.visible")
+      .and("have.text", "customer@test.com");
+  });
+  ...
+})
+```
+
+**Note:** Page Object Model (POM) can be trick when working with integrated steps (e.g. redirections).
