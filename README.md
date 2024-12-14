@@ -100,3 +100,65 @@ describe("Pre-registration", () => {
 ```
 
 **Note:** Page Object Model (POM) can be trick when working with integrated steps (e.g. redirections).
+
+### Tips and tricks
+
+To improve even more the POM you can define [components](/web/cypress/support/pages/components/) to represent parts of the design that can be shared across multiple pages (e.g. headers and footers):
+
+1. Creating the component class [header.js](/web//cypress/support/pages/components/header.js):
+
+```js
+class Header {
+  goToPreReg() {
+    cy.get('header nav a[href="pre-cadastro"]').click()
+  }
+
+  verifyPreReg(firstName, email) {
+    cy.get('.user-name')
+      .should('be.visible')
+      .and('have.text', 'Olá, ' + firstName)
+    cy.get('.user-email').should('be.visible').and('have.text', email)
+  }
+}
+
+export default new Header()
+```
+
+**Note:** both the redirect and the registry confirmation occurs checking for header elements so you can group them up inside the component.
+
+2. Updating required steps to keep the flow running:
+
+```js
+import header from './components/header'
+
+class HomePage {
+  constructor() {
+    this.header = header
+  }
+
+  go() {
+    cy.visit('/')
+  }
+}
+
+export default new HomePage()
+```
+
+**Note:** the first page is still the homepage so you need to create a function for the redirection.
+
+3. Calling the functions using the POM:
+
+```js
+describe("Pre-registration", () => {
+  it("Should perform clients pre-registration", () => {
+    homePage.go();
+    homePage.header.goToPreReg(); // using constructor to import header component as sub-section of the homePage class
+    preRegPage.fillForm("Customer Test", "customer@test.com");
+    preRegPage.submit();
+    homePage.header.verifyPreReg("Customer", "customer@test.com");
+  });
+  ...
+})
+```
+
+**Note:** you can use constructors (steps executed whenever a class is called) to import the header component so that you can use it as sub-sections of your main page.
