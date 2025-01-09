@@ -101,6 +101,87 @@ describe("Pre-registration", () => {
 
 **Note:** Page Object Model (POM) can be trick when working with integrated steps (e.g. redirections).
 
+### Migrating from POM to Actions
+
+Page Object Model can be trick sometimes when working with cross page elements and the Actions model can be very helpful for that purpose, once instead of defining functions per page, the functions are defined per actions (e.g. pre-registration actions from [prereg.js](/web/cypress/support/actions/prereg.js)):
+
+1. first you define the functions within the actions file:
+
+```js
+class PreReg {
+  start(fullName, email) {
+    cy.visit('/')
+
+    cy.get('header nav a[href="pre-cadastro"]').click()
+
+    cy.get('form h2').should('be.visible').and('have.text', 'Seus dados')
+
+    cy.get('input[name="fullname"]').type(fullName)
+    cy.get('input[name="email"]').type(email)
+
+    cy.contains('button[type="submit"]', 'Continuar').click()
+  }
+
+  verify(firstName, email) {
+    cy.get('.user-name')
+      .should('be.visible')
+      .and('have.text', 'Olá, ' + firstName)
+    cy.get('.user-email').should('be.visible').and('have.text', email)
+  }
+
+  alert(fieldName, text) {
+    cy.contains('label', fieldName)
+      .parent()
+      .find('.alert-msg')
+      .should('be.visible')
+      .and('have.text', text)
+  }
+}
+
+export default new PreReg()
+```
+
+2. then you need to call the new funcions, replacing the old POM standard:
+
+```js
+describe("Pre-registration", () => {
+  it.only("Should perform clients pre-registration", () => {
+    // homePage.go();
+    // homePage.header.goToPreReg();
+    // preRegPage.fillForm("Customer Test", "customer@test.com");
+    // preRegPage.submit();
+    // homePage.header.verifyPreReg("Customer", "customer@test.com");
+
+    prereg.start("Customer Test", "customer@test.com");
+    prereg.verify("Customer", "customer@test.com");
+  });
+  ...
+})
+```
+
+3. lastly some adaptations are made to cover different conditional paths (e.g. empty fields):
+
+```js
+class PreReg {
+  start(fullName = '', email = '') {
+    ...
+    cy.get('input[name="fullname"]').as('fullName')
+    cy.get('input[name="email"]').as('email')
+
+    if (fullName) {
+      cy.get('@fullName').type(fullName)
+    }
+
+    if (email) {
+      cy.get('@email').type(email)
+    }
+
+    cy.contains('button[type="submit"]', 'Continuar').click()
+  }
+  ...
+}
+```
+
 ### Tips and tricks
 
 To improve even more the POM you can define [components](/web/cypress/support/pages/components/) to represent parts of the design that can be shared across multiple pages (e.g. headers and footers):
