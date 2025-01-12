@@ -231,6 +231,8 @@ describe('Pre-registration', () => {
 
 ## Tips and tricks
 
+### Grouping components
+
 To improve even more the POM you can define [components](/web/cypress/support/pages/components/) to represent parts of the design that can be shared across multiple pages (e.g. headers and footers):
 
 1. Creating the component class [header.js](/web//cypress/support/pages/components/header.js):
@@ -290,3 +292,7 @@ describe("Pre-registration", () => {
 ```
 
 **Note:** you can use constructors (steps executed whenever a class is called) to import the header component so that you can use it as sub-sections of your main page.
+
+### Working with javascript
+
+It is pretty common to use javascript within the cypress scripts, and it is possible to use some tools like [Javascript Playground](https://playcode.io/) to test and build javascript scripts outside of the test suite itself.

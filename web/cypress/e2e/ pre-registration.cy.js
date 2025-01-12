@@ -1,7 +1,12 @@
 describe("Pre-registration", () => {
   it("Should perform clients pre-registration", () => {
-    cy.startPreRegistration("Customer Test", "customer@test.com");
-    cy.verifyPreRegistration("Customer", "customer@test.com");
+    const user = {
+      fullName: "Customer Test",
+      email: "customer@test.com",
+    };
+
+    cy.startPreRegistration(user);
+    cy.verifyPreRegistration(user);
   });
 
   it("Required fields", () => {
@@ -11,12 +16,22 @@ describe("Pre-registration", () => {
   });
 
   it("Should not complete pre-registration with the first name only", () => {
-    cy.startPreRegistration("Customer", "customer@test.com");
+    const user = {
+      fullName: "Customer",
+      email: "customer@test.com",
+    };
+
+    cy.startPreRegistration(user);
     cy.alertHave("Nome Completo", "Informe seu nome completo.");
   });
 
   it("Should not complete pre-registration with invalid email", () => {
-    cy.startPreRegistration("Customer", "www.customertest.com");
+    const user = {
+      fullName: "Customer Test",
+      email: "www.customertest.com",
+    };
+
+    cy.startPreRegistration(user);
     cy.alertHave("E-mail", "O e-mail inserido é inválido.");
   });
 });

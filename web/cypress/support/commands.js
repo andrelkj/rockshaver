@@ -24,7 +24,7 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
-Cypress.Commands.add("startPreRegistration", (fullName = "", email = "") => {
+Cypress.Commands.add("startPreRegistration", (user) => {
   {
     cy.visit("/");
 
@@ -35,23 +35,23 @@ Cypress.Commands.add("startPreRegistration", (fullName = "", email = "") => {
     cy.get('input[name="fullname"]').as("fullName");
     cy.get('input[name="email"]').as("email");
 
-    if (fullName) {
-      cy.get("@fullName").type(fullName);
+    if (user?.fullName) {
+      cy.get("@fullName").type(user.fullName);
     }
 
-    if (email) {
-      cy.get("@email").type(email);
+    if (user?.email) {
+      cy.get("@email").type(user.email);
     }
 
     cy.contains('button[type="submit"]', "Continuar").click();
   }
 });
 
-Cypress.Commands.add("verifyPreRegistration", (firstName, email) => {
+Cypress.Commands.add("verifyPreRegistration", (user) => {
   cy.get(".user-name")
     .should("be.visible")
-    .and("have.text", "Olá, " + firstName);
-  cy.get(".user-email").should("be.visible").and("have.text", email);
+    .and("have.text", "Olá, " + user.fullName.split(" ")[0]);
+  cy.get(".user-email").should("be.visible").and("have.text", user.email);
 });
 
 Cypress.Commands.add("alertHave", (fieldName, text) => {
