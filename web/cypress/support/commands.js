@@ -24,7 +24,7 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
-Cypress.Commands.add("startPreRegistration", (user) => {
+Cypress.Commands.add("iniciarPreCadastro", (usuario) => {
   {
     cy.visit("/");
 
@@ -32,32 +32,32 @@ Cypress.Commands.add("startPreRegistration", (user) => {
 
     cy.get("form h2").should("be.visible").and("have.text", "Seus dados");
 
-    cy.get('input[name="fullname"]').as("fullName");
+    cy.get('input[name="fullname"]').as("nome");
     cy.get('input[name="email"]').as("email");
 
-    if (user?.fullName) {
-      cy.get("@fullName").type(user.fullName);
+    if (usuario?.nome) {
+      cy.get("@nome").type(usuario.nome);
     }
 
-    if (user?.email) {
-      cy.get("@email").type(user.email);
+    if (usuario?.email) {
+      cy.get("@email").type(usuario.email);
     }
 
     cy.contains('button[type="submit"]', "Continuar").click();
   }
 });
 
-Cypress.Commands.add("verifyPreRegistration", (user) => {
+Cypress.Commands.add("verificarPreCadastro", (usuario) => {
   cy.get(".user-name")
     .should("be.visible")
-    .and("have.text", "Olá, " + user.fullName.split(" ")[0]);
-  cy.get(".user-email").should("be.visible").and("have.text", user.email);
+    .and("have.text", "Olá, " + usuario.nome.split(" ")[0]);
+  cy.get(".user-email").should("be.visible").and("have.text", usuario.email);
 });
 
-Cypress.Commands.add("alertHave", (fieldName, text) => {
-  cy.contains("label", fieldName)
+Cypress.Commands.add("verificarAlerta", (campo, texto) => {
+  cy.contains("label", campo)
     .parent()
     .find(".alert-msg")
     .should("be.visible")
-    .and("have.text", text);
+    .and("have.text", texto);
 });
