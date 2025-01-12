@@ -182,7 +182,54 @@ class PreReg {
 }
 ```
 
-### Tips and tricks
+### Using cypress custom commands
+
+Cypress has a built-in method to build actions that are reusable accross your test cases called custom commands that can be found under [commands.js](/web/cypress/support/commands.js). Using it you're able to create your own actions and name them as you would like:
+
+1. First you define a custom action by adding a new command:
+
+```js
+// commands.js
+Cypress.Commands.add('startPreRegistration', (fullName = '', email = '') => {
+  {
+    cy.visit('/')
+
+    cy.get('header nav a[href="pre-cadastro"]').click()
+
+    cy.get('form h2').should('be.visible').and('have.text', 'Seus dados')
+
+    cy.get('input[name="fullname"]').as('fullName')
+    cy.get('input[name="email"]').as('email')
+
+    if (fullName) {
+      cy.get('@fullName').type(fullName)
+    }
+
+    if (email) {
+      cy.get('@email').type(email)
+    }
+
+    cy.contains('button[type="submit"]', 'Continuar').click()
+  }
+})
+```
+
+2. Then you call this newly defined action within your test steps:
+
+```js
+// pre-registration.cy.js
+describe('Pre-registration', () => {
+  it('Should perform clients pre-registration', () => {
+    cy.startPreRegistration('Customer Test', 'customer@test.com')
+    cy.verifyPreRegistration('Customer', 'customer@test.com')
+  })
+  ...
+})
+```
+
+**Note:** custom commands method is highly recommended when working with Cypress since it is build and optimized to this pattern.
+
+## Tips and tricks
 
 To improve even more the POM you can define [components](/web/cypress/support/pages/components/) to represent parts of the design that can be shared across multiple pages (e.g. headers and footers):
 
