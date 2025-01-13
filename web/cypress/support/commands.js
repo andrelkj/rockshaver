@@ -52,6 +52,11 @@ Cypress.Commands.add("verificarPreCadastro", (usuario) => {
     .should("be.visible")
     .and("have.text", "Olá, " + usuario.nome.split(" ")[0]);
   cy.get(".user-email").should("be.visible").and("have.text", usuario.email);
+
+  cy.window().then((win) => {
+    const chaveUsuario = win.localStorage.getItem("usuario");
+    expect(chaveUsuario).to.eql(JSON.stringify(usuario));
+  });
 });
 
 Cypress.Commands.add("verificarAlerta", (campo, texto) => {

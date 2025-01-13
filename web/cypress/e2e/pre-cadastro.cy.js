@@ -1,8 +1,8 @@
 describe("Pré-Cadastro", () => {
   it("Deve realizar o pré-cadastro do cliente", () => {
     const usuario = {
-      nome: "Customer Test",
-      email: "customer@test.com",
+      nome: "Customer Teste",
+      email: "customer@teste.com",
     };
 
     cy.iniciarPreCadastro(usuario);
@@ -18,7 +18,7 @@ describe("Pré-Cadastro", () => {
   it("Não deve fazer o pré-cadastro apenas com o primeiro nome", () => {
     const usuario = {
       nome: "Customer",
-      email: "customer@test.com",
+      email: "customer@teste.com",
     };
 
     cy.iniciarPreCadastro(usuario);
@@ -27,8 +27,8 @@ describe("Pré-Cadastro", () => {
 
   it("Não deve fazer o pré-cadastro com email incorreto", () => {
     const usuario = {
-      nome: "Customer Test",
-      email: "www.customertest.com",
+      nome: "Customer Teste",
+      email: "www.customerteste.com",
     };
 
     cy.iniciarPreCadastro(usuario);

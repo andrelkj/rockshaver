@@ -293,6 +293,22 @@ describe("Pre-registration", () => {
 
 **Note:** you can use constructors (steps executed whenever a class is called) to import the header component so that you can use it as sub-sections of your main page.
 
-### Working with javascript
+### Working with Javascript
 
 It is pretty common to use javascript within the cypress scripts, and it is possible to use some tools like [Javascript Playground](https://playcode.io/) to test and build javascript scripts outside of the test suite itself.
+
+### Working with Local storage
+
+For features as login, registration and others the users data is usually stored into the application local storage which make it a useful breakpoint for validation:
+
+1. Open devtool's application tab and look for the local storage
+2. Within Cypress use the window function to locate and get the values from the specific key you want:
+
+```js
+cy.window().then(win => {
+  const chaveUsuario = win.localStorage.getItem('usuario') // store data from the actual window local storage key "usuario" on a variable
+  expect(chaveUsuario).to.eql(JSON.stringify(usuario)) // assert the ocal storage key data against the expected user data
+})
+```
+
+**Note:** the data retrieved from local storage is always in a string format, so you might need to consider converting either the string data from the local storage to a json object or the expected json object to a string.
