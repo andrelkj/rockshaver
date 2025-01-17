@@ -2,19 +2,20 @@ services:
   mongodb:
     container_name: rockshaver-db
     image: mongo:5.0
-    networks: 
+    networks:
       - skynet
     environment:
       - MONGO_INITDB_ROOT_USERNAME=cypress
       - MONGO_INITDB_ROOT_PASSWORD=skills
+      - TZ=America/Sao_Paulo
     restart: unless-stopped
     ports:
-      - "27017:27017"
-      
+      - '27017:27017'
+
   mongoxp:
     container_name: mongo-express
     image: mongo-express
-    networks: 
+    networks:
       - skynet
     environment:
       - ME_CONFIG_MONGODB_ADMINUSERNAME=cypress
@@ -22,48 +23,54 @@ services:
       - ME_CONFIG_MONGODB_URL=mongodb://cypress:skills@mongodb:27017/?authSource=admin
       - ME_CONFIG_BASICAUTH_USERNAME=cypress
       - ME_CONFIG_BASICAUTH_PASSWORD=skills
+      - TZ=America/Sao_Paulo
     links:
       - mongodb
     restart: unless-stopped
     ports:
-      - "17017:8081"
+      - '17017:8081'
 
   rockshaver-api:
     container_name: rockshaver-api
-    image: papitodev/rockshaver-api:space
+    image: papitodev/rockshaver-api:kong
     networks:
       - skynet
     depends_on:
       - mongodb
     environment:
       - MONGO_URI=mongodb://mongodb:27017/rockshaver
+      - TZ=America/Sao_Paulo
     ports:
-      - "3333:3333"
+      - '3333:3333'
     restart: unless-stopped
     command: /bin/sh -c "npm run go"
 
   rockshaver-web:
     container_name: rockshaver-web
-    image: papitodev/rockshaver-web:space
+    image: papitodev/rockshaver-web:kong
     networks:
       - skynet
     depends_on:
       - rockshaver-api
+    environment:
+      - TZ=America/Sao_Paulo
     ports:
-      - "3000:3000"
+      - '3000:3000'
     restart: unless-stopped
 
   rockshaver-mob:
     container_name: rockshaver-mob
-    image: papitodev/rockshaver-mob:space
+    image: papitodev/rockshaver-mob:kong
     networks:
       - skynet
     depends_on:
       - rockshaver-api
+    environment:
+      - TZ=America/Sao_Paulo
     ports:
-      - "8100:8100"
+      - '8100:8100'
     restart: unless-stopped
 
-networks: 
+networks:
   skynet:
     driver: bridge

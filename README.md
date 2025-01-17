@@ -229,6 +229,64 @@ describe('Pre-registration', () => {
 
 **Note:** custom commands method is highly recommended when working with Cypress since it is build and optimized to this pattern.
 
+### Using fixtures
+
+Fixtures can become very handy when dealing with different types of data, instead of creating several variables inside the test file, fixtures allow to concentrate all the test data within it's exclusive file (e.g. [agendamentos.json](/web/cypress/fixtures/agendamentos.json))
+
+#### Importing fixtures
+
+The javascript approach to use fixtures is to import the data file inside the test file where you want to use it, and then directly call it's objects and values:
+
+```js
+import calendario from "../fixtures/calendario.json"; // import calendario fixture
+
+describe("Agendamento", () => {
+  ...
+  it("Deve fazer um novo agendamento", function () {
+    ...
+    cy.intercept("GET", "http://localhost:3333/api/calendario", {
+      statusCode: 200,
+      body: calendario, // apply mocked data from calendar fixture as body to the calendar request
+    }).as("getCalendario");
+    ...
+  })
+})
+```
+
+**Note:** using the javascript approach it's not necessary to create variables.
+
+#### Creating fixture objects with Cypress fixture method
+
+Another alternative is to use Cypress fixture method approach, that creates a fixture object that you can access from within the test cases:
+
+```js
+describe('Agendamento', () => {
+  beforeEach(function () {
+    cy.fixture('agendamentos').then(agendamentos => {
+      this.agendamentos = agendamentos // create the object agendamentos with fixture data
+    })
+  })
+
+  it('Deve fazer um novo agendamento', function () {
+    const agendamento = this.agendamentos.sucesso // create a variable that will contain the specific set of information we need for this one scenario
+    ...
+    cy.iniciarPreCadastro(agendamento.usuario) // access the object data
+    cy.verificarPreCadastro(agendamento.usuario)
+    ...
+    cy.contains('.dia-semana', agendamento.dia).click()
+
+    cy.contains('.hora-opcao', agendamento.hora).click()
+    cy.contains('button', 'Confirmar e reservar').click()
+
+    cy.get('h3')
+      .should('be.visible')
+      .and('have.text', 'Tudo certo por aqui! Seu horário está confirmado.')
+  })
+})
+```
+
+**Note:** when using the cypress fixture method approach there is no need to import the fixture, but it is required to define the object. Another important consideration is that the fixture method only don't work with arrow functions, so you need to define standard `function()` functions for it to work.
+
 ## Tips and tricks
 
 ### Grouping components

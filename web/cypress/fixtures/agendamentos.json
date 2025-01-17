@@ -1,0 +1,17 @@
+{
+  "sucesso": {
+    "data": "16/12/2024",
+    "hora": "10:00",
+    "dia": "16",
+    "servico": {
+      "codigo": 3,
+      "descricao": "Combo"
+    },
+    "usuario": {
+      "nome": "Agendamento Teste",
+      "email": "agendamento@teste.com"
+    }
+  },
+  "conflito": {},
+  "duplicado": {}
+}

@@ -48,10 +48,10 @@ Cypress.Commands.add("iniciarPreCadastro", (usuario) => {
 });
 
 Cypress.Commands.add("verificarPreCadastro", (usuario) => {
-  cy.get(".user-name")
+  cy.get(".usuario-nome")
     .should("be.visible")
     .and("have.text", "Olá, " + usuario.nome.split(" ")[0]);
-  cy.get(".user-email").should("be.visible").and("have.text", usuario.email);
+  cy.get(".usuario-email").should("be.visible").and("have.text", usuario.email);
 
   cy.window().then((win) => {
     const chaveUsuario = win.localStorage.getItem("usuario");
