@@ -3,6 +3,7 @@
     "data": "16/12/2024",
     "hora": "10:00",
     "dia": "16",
+    "profissional": "Tina",
     "servico": {
       "codigo": 3,
       "descricao": "Combo"
