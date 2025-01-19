@@ -388,3 +388,11 @@ Cypress.Commands.add("preCadastroLS", (usuario) => {
 ```
 
 **Note:** this approach is only recommended for test scenarios that have pre-requisites (e.g. agendamentos). Main registration flow should keep the standard step by step approach since the local storage skips all the registration steps.
+
+## Tools
+
+### Mailing
+
+Cypress skills use [mailtrap](https://mailtrap.io/) for mailing, it allow to create temp emails to send and receive emails using an inbox that can be connect and integrated through it's API credentials
+
+**Note:** there are limitations for the free version (1000 emails/mo), but for day to day activities and testing it should be enough.
