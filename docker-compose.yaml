@@ -32,7 +32,7 @@ services:
 
   rockshaver-api:
     container_name: rockshaver-api
-    image: papitodev/rockshaver-api:kong
+    image: papitodev/rockshaver-api:freeway
     networks:
       - skynet
     depends_on:
@@ -47,7 +47,7 @@ services:
 
   rockshaver-web:
     container_name: rockshaver-web
-    image: papitodev/rockshaver-web:kong
+    image: papitodev/rockshaver-web:freeway
     networks:
       - skynet
     depends_on:
@@ -60,7 +60,7 @@ services:
 
   rockshaver-mob:
     container_name: rockshaver-mob
-    image: papitodev/rockshaver-mob:kong
+    image: papitodev/rockshaver-mob:freeway
     networks:
       - skynet
     depends_on:
