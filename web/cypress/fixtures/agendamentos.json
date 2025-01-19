@@ -16,7 +16,23 @@
       "email": "agendamento@teste.com"
     }
   },
-  "conflito": {},
+  "conflito": {
+    "data": "20/01/2025",
+    "hora": "15:00",
+    "dia": "20",
+    "profissional": {
+      "nome": "Jimi",
+      "matricula": 1006
+    },
+    "servico": {
+      "codigo": 1,
+      "descricao": "Corte"
+    },
+    "usuario": {
+      "nome": "Conflito Teste",
+      "email": "conflito@teste.com"
+    }
+  },
   "duplicado": {
     "data": "18/01/2025",
     "hora": "14:00",
