@@ -370,3 +370,21 @@ cy.window().then(win => {
 ```
 
 **Note:** the data retrieved from local storage is always in a string format, so you might need to consider converting either the string data from the local storage to a json object or the expected json object to a string.
+
+### Skiping steps with local storage
+
+When working with storage dependent scenarios (e.g. agendamentos, where we need to first perform the pre-registry to then perform the scheduling) it is quite common to store the registry or user information on local storage. One approach to short the process is then to make the registry directly within the local storage:
+
+```js
+// Passo: Executar Pré-Cadastro no Local Storage
+Cypress.Commands.add("preCadastroLS", (usuario) => {
+  cy.window().then((win) => {
+    win.localStorage.setItem("usuario", JSON.stringify(usuario)); // sets the user information as string onto the local storage directly
+
+    cy.visit("/");
+    cy.contains(usuario.email).should("be.visible");
+  });
+});
+```
+
+**Note:** this approach is only recommended for test scenarios that have pre-requisites (e.g. agendamentos). Main registration flow should keep the standard step by step approach since the local storage skips all the registration steps.

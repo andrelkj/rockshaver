@@ -35,6 +35,16 @@ Cypress.Commands.add("verificarPreCadastro", (usuario) => {
   });
 });
 
+// Passo: Executar Pré-Cadastro no Local Storage
+Cypress.Commands.add("preCadastroLS", (usuario) => {
+  cy.window().then((win) => {
+    win.localStorage.setItem("usuario", JSON.stringify(usuario));
+
+    cy.visit("/");
+    cy.contains(usuario.email).should("be.visible");
+  });
+});
+
 // Passo: Verificar Alerta
 Cypress.Commands.add("verificarAlerta", (campo, texto) => {
   cy.contains("label", campo)
