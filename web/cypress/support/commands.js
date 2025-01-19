@@ -30,7 +30,7 @@ import "./actions/precadastro.actions";
 Cypress.Commands.add("agendamentoAPI", (agendamento) => {
   cy.request({
     method: "POST",
-    url: "http://localhost:3333/api/agendamentos",
+    url: `${Cypress.env("baseApi")}/api/agendamentos`,
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer 3a8a9b8fae87baf503e7c5fe5b97fd72",

@@ -33,7 +33,7 @@ describe("Agendamento", () => {
       .and("have.text", "Tudo certo por aqui! Seu horário está confirmado.");
   });
 
-  it("Deve deve mostrar o slot ocupada", function () {
+  it("Deve mostrar o slot ocupada", function () {
     const agendamento = agendamentos.duplicado;
 
     cy.deleteMany(
